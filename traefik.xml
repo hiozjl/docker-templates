@@ -12,7 +12,7 @@
   <Overview/>
   <Category>Network:Web Network:Proxy</Category>
   <WebUI>https://[IP]:[PORT:443]/</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/benderstwin/docker-templates/master/Bender-traefik.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/hiozjl/docker-templates/main/traefik.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/hiozjl/docker-templates/main/traefik.png</Icon>
   <ExtraParams/>
   <PostArgs/>
