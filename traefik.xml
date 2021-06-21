@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>traefik</Name>
+  <Repository>traefik:latest</Repository>
+  <Registry/>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/benderstwin/docker-templates/issues</Support>
+  <Project/>
+  <Overview/>
+  <Category>Network:Web Network:Proxy</Category>
+  <WebUI>https://[IP]:[PORT:443]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/benderstwin/docker-templates/master/Bender-traefik.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/hiozjl/docker-templates/main/traefik.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1624258412</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Description/>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>80</HostPort>
+        <ContainerPort>80</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>443</HostPort>
+        <ContainerPort>443</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/traefik</HostDir>
+      <ContainerDir>/etc/traefik</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/traefik/acme.json</HostDir>
+      <ContainerDir>/acme.json</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/etc/localtime</HostDir>
+      <ContainerDir>/etc/localtime</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/traefik/traefik.yml</HostDir>
+      <ContainerDir>/traefik.yml</ContainerDir>
+      <Mode>rw,slave</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/traefik/configurations</HostDir>
+      <ContainerDir>/configurations</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/var/run/docker.sock</HostDir>
+      <ContainerDir>/var/run/docker.sock</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>API_KEY</Value>
+      <Name>DNSPOD_API_KEY</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Labels>
+    <Label>
+      <Value>Host(`traefik.domain.com`)</Value>
+      <Name>traefik.http.routers.traefik-secure.rule</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.enable</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>bridge</Value>
+      <Name>traefik.docker.network</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>websecure</Value>
+      <Name>traefik.http.routers.traefik-secure.entrypoints</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>user-auth@file</Value>
+      <Name>traefik.http.routers.traefik-secure.middlewares</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>api@internal</Value>
+      <Name>traefik.http.routers.traefik-secure.service</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.frontend.headers.SSLRedirect</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>315360000</Value>
+      <Name>traefik.frontend.headers.STSSeconds</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.frontend.headers.browserXSSFilter</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.frontend.headers.contentTypeNosniff</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.frontend.headers.forceSTSHeader</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.frontend.headers.STSIncludeSubdomains</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.frontend.headers.STSPreload</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>true</Value>
+      <Name>traefik.frontend.headers.frameDeny</Name>
+      <Mode/>
+    </Label>
+    <Label>
+      <Value>8080</Value>
+      <Name>traefik.port</Name>
+      <Mode/>
+    </Label>
+  </Labels>
+  <Config Name="&#x57DF;&#x540D;" Target="traefik.http.routers.traefik-secure.rule" Default="" Mode="" Description="Container Label: traefik.http.routers.traefik-secure.rule" Type="Label" Display="always" Required="false" Mask="false">Host(`traefik.domain.com`)</Config>
+  <Config Name="HTTP" Target="80" Default="80" Mode="tcp" Description="Container Port: 80" Type="Port" Display="always" Required="false" Mask="false">80</Config>
+  <Config Name="443:443" Target="443" Default="443" Mode="tcp" Description="Container Port: 443" Type="Port" Display="always" Required="false" Mask="false">443</Config>
+  <Config Name="DNSPOD_API_KEY" Target="DNSPOD_API_KEY" Default="" Mode="" Description="&#x5BB9;&#x5668; Variable: DNSPOD_API_KEY" Type="Variable" Display="always" Required="false" Mask="false">127034,dc1725b7113fac55c4dbc28932fc545b</Config>
+  <Config Name="Config" Target="/etc/traefik" Default="/mnt/user/appdata/traefik" Mode="rw" Description="path to config directory" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/traefik</Config>
+  <Config Name="Enable Traefik" Target="traefik.enable" Default="true" Mode="" Description="set to false to NOT proxy this application" Type="Label" Display="always" Required="false" Mask="false">true</Config>
+  <Config Name="Docker Network" Target="traefik.docker.network" Default="bridge" Mode="" Description="connect to default bridge network.  " Type="Label" Display="advanced" Required="true" Mask="false">bridge</Config>
+  <Config Name="&#x8BC1;&#x4E66;&#x5B58;&#x653E;" Target="/acme.json" Default="" Mode="rw" Description="Container Path: /acme.json" Type="Path" Display="advanced-hide" Required="false" Mask="false">/mnt/user/appdata/traefik/acme.json</Config>
+  <Config Name="localtime" Target="/etc/localtime" Default="" Mode="rw" Description="Container Path: /etc/localtime" Type="Path" Display="advanced-hide" Required="false" Mask="false">/etc/localtime</Config>
+  <Config Name="&#x9759;&#x6001;&#x914D;&#x7F6E;&#x6587;&#x4EF6;" Target="/traefik.yml" Default="" Mode="rw,slave" Description="Container Path: /traefik.yml" Type="Path" Display="advanced-hide" Required="false" Mask="false">/mnt/user/appdata/traefik/traefik.yml</Config>
+  <Config Name="&#x52A8;&#x6001;&#x914D;&#x7F6E;&#x6587;&#x4EF6;" Target="/configurations" Default="" Mode="rw" Description="Container Path: /configurations" Type="Path" Display="advanced-hide" Required="false" Mask="false">/mnt/user/appdata/traefik/configurations</Config>
+  <Config Name="Docker socket" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="Path to docker socket" Type="Path" Display="advanced" Required="true" Mask="false">/var/run/docker.sock</Config>
+  <Config Name="https" Target="traefik.http.routers.traefik-secure.entrypoints" Default="" Mode="" Description="Container Label: traefik.http.routers.traefik-secure.entrypoints" Type="Label" Display="advanced-hide" Required="false" Mask="false">websecure</Config>
+  <Config Name="&#x9762;&#x677F;&#x8BBF;&#x95EE;&#x5BC6;&#x7801;@file" Target="traefik.http.routers.traefik-secure.middlewares" Default="" Mode="" Description="Container Label: traefik.http.routers.traefik-secure.middlewares" Type="Label" Display="advanced-hide" Required="false" Mask="false">user-auth@file</Config>
+  <Config Name="&#x9762;&#x677F;api" Target="traefik.http.routers.traefik-secure.service" Default="" Mode="" Description="Container Label: traefik.http.routers.traefik-secure.service" Type="Label" Display="advanced-hide" Required="false" Mask="false">api@internal</Config>
+  <Config Name="traefik.frontend.headers.SSLRedirect" Target="traefik.frontend.headers.SSLRedirect" Default="true" Mode="" Description="traefik.frontend.headers.SSLRedirect" Type="Label" Display="advanced" Required="true" Mask="false">true</Config>
+  <Config Name="traefik.frontend.headers.STSSeconds" Target="traefik.frontend.headers.STSSeconds" Default="315360000" Mode="" Description="traefik.frontend.headers.STSSeconds" Type="Label" Display="advanced" Required="true" Mask="false">315360000</Config>
+  <Config Name="traefik.frontend.headers.browserXSSFilter" Target="traefik.frontend.headers.browserXSSFilter" Default="true" Mode="" Description="traefik.frontend.headers.browserXSSFilter" Type="Label" Display="advanced" Required="true" Mask="false">true</Config>
+  <Config Name="traefik.frontend.headers.contentTypeNosniff" Target="traefik.frontend.headers.contentTypeNosniff" Default="true" Mode="" Description="traefik.frontend.headers.contentTypeNosniff" Type="Label" Display="advanced" Required="true" Mask="false">true</Config>
+  <Config Name="traefik.frontend.headers.forceSTSHeader" Target="traefik.frontend.headers.forceSTSHeader" Default="true" Mode="" Description="traefik.frontend.headers.forceSTSHeader" Type="Label" Display="advanced" Required="true" Mask="false">true</Config>
+  <Config Name="traefik.frontend.headers.STSIncludeSubdomains" Target="traefik.frontend.headers.STSIncludeSubdomains" Default="true" Mode="" Description="traefik.frontend.headers.STSIncludeSubdomains" Type="Label" Display="advanced" Required="true" Mask="false">true</Config>
+  <Config Name="traefik.frontend.headers.STSPreload" Target="traefik.frontend.headers.STSPreload" Default="true" Mode="" Description="traefik.frontend.headers.STSPreload" Type="Label" Display="advanced" Required="true" Mask="false">true</Config>
+  <Config Name="traefik.frontend.headers.frameDeny" Target="traefik.frontend.headers.frameDeny" Default="true" Mode="" Description="traefik.frontend.headers.frameDeny" Type="Label" Display="advanced" Required="true" Mask="false">true</Config>
+  <Config Name="traefik.port" Target="traefik.port" Default="8080" Mode="" Description="What port does your traefik container listen on?" Type="Label" Display="advanced" Required="true" Mask="false">8080</Config>
+</Container>
