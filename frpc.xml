@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>frpc</Name>
+  <Repository>chenhw2/frp</Repository>
+  <Registry>https://hub.docker.com/r/chenhw2/frp</Registry>
+  <Network>host</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview/>
+  <Category/>
+  <WebUI/>
+  <TemplateURL/>
+  <Icon>https://raw.githubusercontent.com/hiozjl/docker-templates/main/icon/frp.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1623760323</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Description/>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>frpc.ini路径</HostDir>
+      <ContainerDir>/frp/frpc.ini</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>frpc</Value>
+      <Name>ARGS</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="config" Target="/frp/frpc.ini" Default="" Mode="rw" Description="&#x5BB9;&#x5668; Path: /frp/frpc.ini" Type="Path" Display="always" Required="false" Mask="false">frpc.ini路径</Config>
+  <Config Name="frpc" Target="ARGS" Default="" Mode="" Description="&#x5BB9;&#x5668; Variable: ARGS" Type="Variable" Display="always" Required="false" Mask="false">frpc</Config>
+</Container>
