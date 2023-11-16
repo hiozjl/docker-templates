@@ -19,3 +19,6 @@ payload:
   - DOMAIN-SUFFIX,bard.google.com
 #claude
   - DOMAIN-SUFFIX,claude.ai
+#openai
+  - DOMAIN-SUFFIX,oaistatic.com
+  - DOMAIN-SUFFIX,oaiusercontent.com
