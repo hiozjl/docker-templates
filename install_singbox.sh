@@ -47,7 +47,7 @@ do
                 "type": "vless",
                 "tag": "vless-brutal-in",
                 "listen": "::",
-                "listen_port": "$listen_port",
+                "listen_port": $listen_port,
                 "users": [
                     {
                     "uuid": "$uuid",
