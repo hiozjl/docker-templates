@@ -1,7 +1,9 @@
 #!/bin/bash
 
-echo "请选择要执行的操作："
-options=("安装sing-box" "配置reality-brutal" "配置reality" "安装tcp-brutal" "退出")
+color='\033[1;34m'  # 蓝色
+RES='\033[0m'       # 重置颜色
+echo -e "${color}请选择要执行的操作：${RES}"
+options=("安装sing-box" "配置reality-brutal" "配置reality" "安装tcp-brutal" "启用bbr" "退出")
 PS3="请输入您的选择[1-5]："
 
 select opt in "${options[@]}"
@@ -217,6 +219,24 @@ EOF
                 bash <(curl -fsSL https://tcp.hy2.sh/)
             else
                 echo "内核版本不满足要求，需要5.8以上版本。当前版本: $kernel_version"
+            fi
+            ;;
+        "启用bbr")
+            # 获取当前内核版本
+            kernel_version=$(uname -r)
+            # 提取主版本号和次版本号
+            major_version=$(echo $kernel_version | cut -d. -f1)
+            minor_version=$(echo $kernel_version | cut -d. -f2)
+
+            # 比较版本号
+            if [ $major_version -gt 4 ] || { [ $major_version -eq 4 ] && [ $minor_version -ge 9 ]; }; then
+                echo "当前内核版本为 $kernel_version，支持BBR。正在启用BBR..."
+                # 启用BBR
+                echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+                echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+                sysctl -p
+            else
+                echo "当前内核版本为 $kernel_version。内核版本低于4.9，不支持BBR。"
             fi
             ;;
         "退出")
