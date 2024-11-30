@@ -4,6 +4,19 @@ color='\033[1;34m'  # 蓝色
 RES='\033[0m'       # 重置颜色
 # 自动检测服务器IP地址 
 default_ip=$(hostname -I | awk '{print $1}') # 获取第一个IP地址
+# 检测并安装 uuidgen
+if ! command -v uuidgen &> /dev/null; then
+    echo "uuidgen 未安装，正在尝试安装..."
+    if [[ -f /etc/debian_version ]]; then
+        sudo apt update && sudo apt install -y uuid-runtime
+    elif [[ -f /etc/redhat-release ]]; then
+        sudo yum install -y util-linux
+    else
+        echo "无法检测系统类型，请手动安装 uuidgen。"
+        exit 1
+    fi
+    echo "uuidgen 已成功安装。"
+fi
 echo -e "${color}请选择要执行的操作：${RES}"
 options=("安装sing-box" "配置reality-brutal" "配置reality" "安装tcp-brutal" "启用bbr" "退出")
 PS3="请输入您的选择[1-5]："
