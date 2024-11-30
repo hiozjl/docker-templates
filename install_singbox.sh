@@ -2,6 +2,8 @@
 
 color='\033[1;34m'  # 蓝色
 RES='\033[0m'       # 重置颜色
+# 自动检测服务器IP地址 
+default_ip=$(hostname -I | awk '{print $1}') # 获取第一个IP地址
 echo -e "${color}请选择要执行的操作：${RES}"
 options=("安装sing-box" "配置reality-brutal" "配置reality" "安装tcp-brutal" "启用bbr" "退出")
 PS3="请输入您的选择[1-5]："
@@ -27,7 +29,8 @@ do
             short_id=$(openssl rand -hex $((RANDOM % 9 + 8)))
 
             # 提示用户输入其他配置信息
-            read -p "请输入服务器IP地址: " server_ip
+            read -p "请输入服务器IP地址 [默认: $default_ip]: " server_ip
+            server_ip=${server_ip:-$default_ip} # 如果用户未输入内容，使用默认值
             read -p "请输入监听端口: " listen_port
             read -p "请输入伪装服务器域名: " server_name
             read -p "请输入上行Mbps: " up_mbps
@@ -137,7 +140,8 @@ EOF
             short_id=$(openssl rand -hex 8)
 
             # 提示用户输入其他配置信息
-            read -p "请输入服务器IP地址: " server_ip
+            read -p "请输入服务器IP地址 [默认: $default_ip]: " server_ip
+            server_ip=${server_ip:-$default_ip} # 如果用户未输入内容，使用默认值
             read -p "请输入监听端口: " listen_port
             read -p "请输入伪装服务器域名: " server_name
 
