@@ -156,7 +156,7 @@ EOF
                 "type": "vless",
                 "tag": "vless-in",
                 "listen": "::",
-                "listen_port": "$listen_port",
+                "listen_port": $listen_port,
                 "users": [
                     {
                     "uuid": "$uuid",
