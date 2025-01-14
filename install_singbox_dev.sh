@@ -23,8 +23,8 @@ if ! command -v uuidgen &> /dev/null; then
     echo "uuidgen 已成功安装。"
 fi
 echo -e "${color}请选择要执行的操作：${RES}"
-options=("安装sing-box" "配置reality" "启用bbr" "退出")
-PS3="请输入您的选择[1-3]："
+options=("安装sing-box" "配置reality" "启用bbr" "卸载sing-box" "退出")
+PS3="请输入您的选择[1-4]："
 
 select opt in "${options[@]}"
 do
@@ -33,6 +33,9 @@ do
             echo "正在安装sing-box..."
             bash <(curl -fsSL https://sing-box.app/deb-install.sh)
             echo "安装sing-box成功！"
+            echo "正在启用并启动sing-box服务..."
+            systemctl enable --now sing-box
+            systemctl status sing-box
             ;;
         "配置reality")
             # 自动生成 private_key 和 public_key
@@ -49,7 +52,10 @@ do
             # 提示用户输入其他配置信息
             read -p "请输入服务器IP地址 [默认: $default_ip]: " server_ip
             server_ip=${server_ip:-$default_ip} # 如果用户未输入内容，使用默认值
-            read -p "请输入监听端口: " listen_port
+            # 生成随机高位端口 (1024-65535)
+            random_port=$((RANDOM % 64511 + 10240))
+            read -p "请输入监听端口 [默认: $random_port]: " listen_port
+            listen_port=${listen_port:-$random_port}
             read -p "请输入伪装服务器域名: " server_name
 
             # 创建配置文件
@@ -123,7 +129,7 @@ EOF
 EOF
 
             # 生成vless:// URL
-            vless_url="vless://$uuid@$server_ip:$listen_port?encryption=none&security=reality&sni=$server_name&fp=chrome&pbk=$public_key&sid=$short_id&spx=%2F&type=tcp&headerType=none"
+            vless_url="vless://$uuid@$server_ip:$listen_port?encryption=none&security=reality&sni=$server_name&fp=chrome&pbk=$public_key&sid=$short_id&spx=%2F&type=tcp&headerType=none&flow=xtls-rprx-vision"
             echo -e "\nVLESS URL 配置如下："
             echo "$vless_url"
             ;;
