@@ -26,7 +26,7 @@ do
     case $opt in
         "安装sing-box")
             echo "正在安装sing-box..."
-            bash <(curl -fsSL https://sing-box.app/install.sh | sh -s -- --version 1.11.15)
+            curl -fsSL https://sing-box.app/install.sh | sh -s -- --version 1.11.15
             echo "安装sing-box成功！"
             ;;
         "配置reality-brutal")
