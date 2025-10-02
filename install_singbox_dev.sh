@@ -41,9 +41,14 @@ if ! command -v qrencode &> /dev/null; then
     fi
 fi
 
-echo -e "${color}请选择要执行的操作：${RES}"
-options=("安装sing-box" "配置reality" "启用bbr" "退出")
-PS3="请输入您的选择[1-4]："
+# 显示选项的函数
+show_menu() {
+    echo -e "\n${color}请选择要执行的操作：${RES}"
+    options=("安装sing-box" "配置reality" "启用bbr" "退出")
+    PS3="请输入您的选择[1-4]："
+}
+
+show_menu
 
 select opt in "${options[@]}"
 do
@@ -60,11 +65,13 @@ do
             else
                 echo "sing-box安装失败！"
             fi
+            show_menu
             ;;
         "配置reality")
             # 检查sing-box是否安装
             if ! command -v sing-box &> /dev/null; then
                 echo "请先安装sing-box！"
+                show_menu
                 continue
             fi
             
@@ -89,6 +96,7 @@ do
             # 端口号验证
             if ! [[ "$listen_port" =~ ^[0-9]+$ ]] || [ "$listen_port" -lt 1 ] || [ "$listen_port" -gt 65535 ]; then
                 echo "错误：端口号必须在1-65535之间"
+                show_menu
                 continue
             fi
             
@@ -193,11 +201,13 @@ EOF
             fi
             
             echo -e "\n${color}提示：复制上面的VLESS链接可直接导入支持URL导入的客户端${RES}"
+            show_menu
             ;;
         "启用bbr")
             # 检查是否已启用BBR
             if sysctl -n net.ipv4.tcp_congestion_control | grep -q bbr; then
                 echo "BBR已经启用"
+                show_menu
                 continue
             fi
             
@@ -214,10 +224,14 @@ EOF
             else
                 echo "当前内核版本为 $kernel_version。内核版本低于4.9，不支持BBR。"
             fi
+            show_menu
             ;;
         "退出")
             break
             ;;
-        *) echo "无效选项 $REPLY";;
+        *) 
+            echo "无效选项 $REPLY"
+            show_menu
+            ;;
     esac
 done
