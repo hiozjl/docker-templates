@@ -92,8 +92,8 @@ do
                 continue
             fi
             
-            read -p "请输入伪装服务器域名 [默认: www.microsoft.com]: " server_name
-            server_name=${server_name:-www.microsoft.com}
+            read -p "请输入伪装服务器域名 [默认: yahoo.com]: " server_name
+            server_name=${server_name:-yahoo.com}
 
             # 创建配置目录
             mkdir -p /etc/sing-box/
