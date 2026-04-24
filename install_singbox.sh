@@ -55,7 +55,7 @@ do
     case $opt in
         "安装sing-box")
             echo "正在安装sing-box..."
-            if curl -fsSL https://sing-box.app/install.sh | sh -s -- --version 1.11.15; then
+            if curl -fsSL https://sing-box.app/install.sh | sh -s -- --version 1.13.11; then
                 echo "安装sing-box成功！"
                 # 创建配置目录
                 mkdir -p /etc/sing-box/
