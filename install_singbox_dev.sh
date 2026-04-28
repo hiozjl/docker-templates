@@ -52,6 +52,18 @@ if ! command -v uuidgen &> /dev/null; then
     echo "uuidgen 已成功安装。"
 fi
 
+# 检测并安装 openssl
+if ! command -v openssl &> /dev/null; then
+    echo "openssl 未安装，正在尝试安装..."
+    case $PKG_MANAGER in
+        apk)  apk add openssl ;;
+        apt)  apt update && apt install -y openssl ;;
+        yum)  yum install -y openssl ;;
+        *)    echo "无法检测系统类型，请手动安装 openssl。"; exit 1 ;;
+    esac
+    echo "openssl 已成功安装。"
+fi
+
 # 检查并安装 qrencode
 if ! command -v qrencode &> /dev/null; then
     echo "检测到未安装 qrencode（用于生成二维码），是否安装？[y/N]"
@@ -141,8 +153,6 @@ do
     },
     "inbounds": [
         {
-            "sniff": true,
-            "sniff_override_destination": true,
             "type": "vless",
             "tag": "vless-in",
             "listen": "::",
@@ -177,7 +187,15 @@ do
             "type": "block",
             "tag": "block"
         }
-    ]
+    ],
+    "route": {
+        "rules": [
+            {
+                "inbound": ["vless-in"],
+                "action": "sniff"
+            }
+        ]
+    }
 }
 EOF
 
