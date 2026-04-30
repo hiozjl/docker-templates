@@ -92,16 +92,76 @@ do
     case $opt in
         "安装sing-box")
             echo "正在安装sing-box..."
-            if curl -fsSL https://sing-box.app/install.sh | sh -s -- --version 1.13.11; then
+            VERSION="1.13.11"
+            ARCH=$(uname -m)
+            case "$ARCH" in
+                x86_64)  SING_ARCH="amd64" ;;
+                aarch64) SING_ARCH="arm64" ;;
+                armv7l)  SING_ARCH="armv7" ;;
+                *)       echo "不支持的架构: $ARCH"; show_menu; continue ;;
+            esac
+
+            TARBALL="sing-box-${VERSION}-linux-${SING_ARCH}.tar.gz"
+            URL="https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/${TARBALL}"
+
+            echo "下载 $URL ..."
+            cd /tmp
+            curl -fLO "$URL" || { echo "下载失败！"; show_menu; continue; }
+            tar -xzf "$TARBALL" || { echo "解压失败！"; show_menu; continue; }
+            cp "sing-box-${VERSION}-linux-${SING_ARCH}/sing-box" /usr/local/bin/
+            chmod +x /usr/local/bin/sing-box
+            rm -rf "sing-box-${VERSION}-linux-${SING_ARCH}" "$TARBALL"
+
+            # 验证安装
+            if sing-box version; then
                 echo "安装sing-box成功！"
-                # 创建配置目录
-                mkdir -p /etc/sing-box/
-                # 启用并启动服务
-                svc_enable sing-box
-                svc_start sing-box
             else
                 echo "sing-box安装失败！"
+                show_menu
+                continue
             fi
+
+            # 创建配置目录和最小默认配置
+            mkdir -p /etc/sing-box/
+            cat <<'EOF' > /etc/sing-box/config.json
+{
+    "log": {
+        "disabled": false,
+        "level": "info",
+        "timestamp": true
+    },
+    "inbounds": [],
+    "outbounds": [
+        {
+            "type": "direct",
+            "tag": "direct"
+        }
+    ]
+}
+EOF
+
+            # 如果 openrc 下没有 sing-box 服务，自动创建
+            if [[ $SERVICE_MANAGER == "openrc" ]] && [[ ! -f /etc/init.d/sing-box ]]; then
+                cat <<'EOF2' > /etc/init.d/sing-box
+#!/sbin/openrc-run
+
+name="sing-box"
+description="sing-box daemon"
+command="/usr/local/bin/sing-box"
+command_args="run -c /etc/sing-box/config.json"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need net
+}
+EOF2
+                chmod +x /etc/init.d/sing-box
+            fi
+
+            # 启用并启动服务
+            svc_enable sing-box
+            svc_start sing-box
             show_menu
             ;;
         "配置reality")
