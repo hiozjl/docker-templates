@@ -112,6 +112,12 @@ do
             chmod +x /usr/local/bin/sing-box
             rm -rf "sing-box-${VERSION}-linux-${SING_ARCH}" "$TARBALL"
 
+            # Alpine musl 需要 gcompat 兼容层才能运行 glibc 二进制
+            if [[ $PKG_MANAGER == "apk" ]]; then
+                echo "检测到 Alpine，安装 glibc 兼容层..."
+                apk add gcompat
+            fi
+
             # 验证安装
             if sing-box version; then
                 echo "安装sing-box成功！"
